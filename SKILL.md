@@ -18,7 +18,7 @@ Build **HTML5 games that run inside Telegram**. Default to a **Telegram Mini App
 
 Do not silently recast a native Unity, Unreal, or Godot game as a Mini App. Explain that this workflow targets web technology, then ask whether an HTML5 port or companion Mini App is acceptable. Do not treat a normal website as a finished Telegram game merely because it has a link.
 
-Read `references/telegram-platform.md` before choosing an integration path. Read `references/testing-protocol.md` before testing. Use the two templates in `references/` to establish durable project context.
+Read `references/telegram-platform.md` before choosing an integration path and `references/testing-protocol.md` before testing. Use the specification and systems templates in `references/`. Copy `templates/telegram-platform-adapter.ts` for the client boundary, then copy `templates/telegram-init-data-verifier.ts` and `templates/express-telegram-auth-router.ts` when implementing verified Mini App sessions.
 
 ## Non-negotiable rules
 
@@ -79,7 +79,7 @@ When the game needs a bot webhook, scheduled reset, live room, or long-running p
 
 Create a narrow platform adapter rather than scattering `window.Telegram` calls throughout game code. It must cover initialization and `ready()`/viewport setup; theme and safe-area values; launch parameters and validated-session bootstrap; lifecycle handling; optional fullscreen, orientation, haptics, storage, sharing, and back button behavior; and a browser-development mock with no elevated trust.
 
-Keep game systems dependent on this adapter interface, not the Telegram global. Establish a backend endpoint that receives raw `initData`, verifies it, checks freshness, and returns only required game-session data. Define rate limits and idempotency for score submissions and purchase/reward callbacks before implementing an economy.
+Keep game systems dependent on this adapter interface, not the Telegram global. Copy the backend verifier and Express router templates rather than improvising an HMAC flow. Establish a backend endpoint that receives raw `initData`, verifies it, checks freshness, and returns only required game-session data. Define rate limits and idempotency for score submissions and purchase/reward callbacks before implementing an economy.
 
 State the selected architecture and its reason to the user. Request BotFather configuration or credentials only when they block the next real integration step. Do not ask users to paste a long-lived bot token into chat when a secure project-secret flow is available.
 
