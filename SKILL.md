@@ -20,6 +20,8 @@ Do not silently recast a native Unity, Unreal, or Godot game as a Mini App. Expl
 
 Read `references/telegram-platform.md` before choosing an integration path and `references/testing-protocol.md` before testing. Use the specification and systems templates in `references/`. Copy `templates/telegram-platform-adapter.ts` for the client boundary, then copy `templates/telegram-init-data-verifier.ts` and `templates/express-telegram-auth-router.ts` when implementing verified Mini App sessions.
 
+When the game is turn-based with discrete moves and needs server-authoritative rules, read `references/boardgame-io.md` before designing the multiplayer layer, and copy `templates/boardgame-io-telegram-server.ts` and `templates/boardgame-io-telegram-client.ts`.
+
 ## Non-negotiable rules
 
 | Area | Requirement |
@@ -72,6 +74,10 @@ Write `TELEGRAM_GAME_SPEC.md` using `references/telegram-game-spec.template.md`.
 ### Select hosting and server responsibilities
 
 A real Mini App game generally needs a server when it has identity, cloud saves, leaderboards, referral rewards, commerce, moderation, multiplayer, or bot updates. Prefer a full-stack web project in these cases so the game, API, database, and encrypted secrets stay together. Use a static site only for offline/demo gameplay without trusted user state.
+
+### Select a multiplayer engine
+
+Decide whether a game engine owns the authoritative rules before writing a bespoke room server. For turn-based games with discrete moves — card, board, word, deduction, drafting, asynchronous play — `boardgame.io` supplies the authoritative master, hidden-information handling, and match lifecycle, and `references/boardgame-io.md` covers the Telegram-specific integration: binding ordinal seats to verified Telegram users, keeping the Lobby API private, refreshing session credentials mid-match, and surviving WebView suspension. Do not adopt it for real-time or physics-driven games, and do not treat its `credentials` as a Telegram session.
 
 When the game needs a bot webhook, scheduled reset, live room, or long-running process, assess deployment architecture before coding it. Use an HTTPS webhook handler for Bot API updates; use an always-on service only when real-time state requires it. Do not use an ephemeral environment to receive production bot callbacks.
 
@@ -144,4 +150,5 @@ Re-read `TELEGRAM_GAME_SPEC.md`, `SYSTEMS.md`, and `INTEGRATION_STATUS.md` at th
 [2]: https://core.telegram.org/bots/api#games "Telegram Bot API: Games"
 [3]: https://core.telegram.org/bots/api#validating-data-received-via-the-mini-app "Telegram Bot API: Validating data received via the Mini App"
 [4]: https://telegram.org/blog/fullscreen-miniapps-and-more "Telegram: Mini Apps 2.0"
-[5]: https://github.com/Sudhanshu5669/Html5-Gamedev-Skill "Source inspiration: HTML5 Game-Dev Skill (MIT)"
+[5]: https://boardgame.io "boardgame.io: turn-based game engine (MIT)"
+[6]: https://github.com/Sudhanshu5669/Html5-Gamedev-Skill "Source inspiration: HTML5 Game-Dev Skill (MIT)"
