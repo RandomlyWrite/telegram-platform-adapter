@@ -18,7 +18,7 @@ Build **HTML5 games that run inside Telegram**. Default to a **Telegram Mini App
 
 Do not silently recast a native Unity, Unreal, or Godot game as a Mini App. Explain that this workflow targets web technology, then ask whether an HTML5 port or companion Mini App is acceptable. Do not treat a normal website as a finished Telegram game merely because it has a link.
 
-Read `references/telegram-platform.md` before choosing an integration path and `references/testing-protocol.md` before testing. Use the specification and systems templates in `references/`. Copy `templates/telegram-platform-adapter.ts` for the client boundary, then copy `templates/telegram-init-data-verifier.ts` and `templates/express-telegram-auth-router.ts` when implementing verified Mini App sessions.
+Read `references/telegram-platform.md` before choosing an integration path and `references/testing-protocol.md` before testing. Use the specification and systems templates in `references/`. Copy `templates/telegram-platform-adapter.ts` for the client boundary, then copy `templates/telegram-init-data-verifier.ts` and `templates/express-telegram-auth-router.ts` when implementing verified Mini App sessions. For a 3D board game, `templates/babylon-casino-board-renderer.ts` demonstrates the rendering boundary: a Babylon.js scene module that owns meshes, materials, and idle animation only, and takes board state from game systems.
 
 ## Non-negotiable rules
 
