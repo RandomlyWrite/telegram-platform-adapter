@@ -133,7 +133,7 @@ export class BoardRenderer {
   setDeskPosition(index: number) {
     if (this.deskIndex === index) return;
     this.deskIndex = index;
-    if (this.deskBeacon) this.deskBeacon.position = this.positionFor(index).add(new Vector3(0, 0.78, 0));
+    if (this.deskBeacon) this.deskBeacon.position = this.positionFor(index).add(new Vector3(0, 0.42, 0));
     this.spaceMaterials.forEach((material, materialIndex) => {
       const color = Color3.FromHexString(spaceColors[getSpaceType(materialIndex, this.deskIndex)]);
       material.diffuseColor = color;
@@ -262,7 +262,7 @@ export class BoardRenderer {
       this.spaceMeshes.push(space);
       this.spaceMaterials.push(material);
 
-      if (type === "solo" || type === "desk" || isGate) {
+      if (type === "solo" || isGate) {
         const marker = MeshBuilder.CreatePolyhedron(
           `square-marker-${index}`,
           { type: 1, size: isGate ? 0.58 : 0.29 },
@@ -274,9 +274,24 @@ export class BoardRenderer {
         markerMaterial.diffuseColor = Color3.FromHexString(isGate ? "#d2a84d" : "#d9c69a");
         markerMaterial.emissiveColor = Color3.FromHexString(isGate ? "#bd3131" : "#96a63b").scale(0.6);
         marker.material = markerMaterial;
-        if (type === "desk") this.deskBeacon = marker;
       }
     }
+    this.createDeskBeacon();
+  }
+
+  /*
+   * The desk roams, so its beacon is its own mesh rather than a borrowed ring
+   * marker. Reusing the marker meant a desk sitting on the gate carried the
+   * gate's crown away with it on the first setDeskPosition call.
+   */
+  private createDeskBeacon() {
+    const beacon = MeshBuilder.CreatePolyhedron("desk-beacon", { type: 1, size: 0.29 }, this.scene);
+    beacon.position = this.positionFor(this.deskIndex).add(new Vector3(0, 0.42, 0));
+    const beaconMaterial = new StandardMaterial("desk-beacon-material", this.scene);
+    beaconMaterial.diffuseColor = Color3.FromHexString("#d9c69a");
+    beaconMaterial.emissiveColor = Color3.FromHexString("#bd3131").scale(0.6);
+    beacon.material = beaconMaterial;
+    this.deskBeacon = beacon;
   }
 
   private createTownProps() {
